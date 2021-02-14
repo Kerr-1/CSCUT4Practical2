@@ -1,9 +1,18 @@
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import javax.swing.*;
 import java.lang.Number;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.io.FileWriter;
+
+
+
 
 /**
  * 
@@ -12,23 +21,58 @@ import java.lang.Number;
  */
 public class FilesInOut {
 
-    public static void main(String[] args) {
-        // Replace this with statements to set the file name (input) and file name (output).
-        // Initially it will be easier to hardcode suitable file names.
+    public static void main(String[] args)  {
+      String arr[] = new String[3];
+      String lines[] = new String[14];
+      int i = 0;
+      boolean u = true; //args[0]
+        try {
+            File myObj = new File("input.txt"); //change to args[1]
 
-        // Set up a new Scanner to read the input file.
-        // Processing line by line would be sensible here.
-        // Initially, echo the text to System.out to check you are reading correctly.
-        // Then add code to modify the text to the output format.
 
-        // Set up a new PrintWriter to write the output file.
-        // Add suitable code into the above processing (because you need to do this line by line also.
-        // That is, read a line, write a line, loop.
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                arr = data.split("\\s+");
+                lines[i] = arr[0] + " " + arr[1] +" " + dateFormat(arr[2]);
+                System.out.println(lines[i] + " INDEX       " + i);
+                i++;
 
-        // Finally, add code to read the filenames as arguments from the command line.
 
-        System.out.println("You need to add your own code to do anything");
+            }
+            myReader.close();
+
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+              try {
+                        FileWriter file = new FileWriter("formatted.txt"); //change to args[2]
+                        for(String line : lines) {
+                            if(u) {
+                                file.write(line.toUpperCase(Locale.ROOT) + "\n");
+                            }
+                            else {
+                                file.write(line + "\n");
+                            }
+
+                        }
+
+
+                        file.close();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
     } // main
+
+    public static String dateFormat(String a) {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("ddMMyyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate date = LocalDate.parse(a, dateFormat);
+        return formatter.format(date);
+    }
 
 } // FilesInOut
